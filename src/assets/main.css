@@ -11,5 +11,8 @@
 * {
   font-family: 'Lexend', sans-serif;
 }
+body {
+  background-color: var(--color-lightgray-900);
+}
 
 
