@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { sendRequest } from '@/api/api.ts'
-import { ref, onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useAuthStore } from '@/stores/authStore'
 import { useRouter } from 'vue-router'
+import avatarImage from '@/assets/noavatar.png'
 
 interface ParticipantInfo {
   login: string
@@ -26,15 +27,14 @@ async function fetchData() {
     loading.value = true
     error.value = ''
 
-    if (!authStore.authToken) {
+    if (authStore.authToken) {
+      information.value = await sendRequest(
+        'https://edu-api.21-school.ru/services/21-school/api/v1/participants/shootspi',
+        authStore.authToken,
+      )
+    } else {
       throw new Error('Токен авторизации отсутствует')
     }
-
-    const data = await sendRequest(
-      'https://edu-api.21-school.ru/services/21-school/api/v1/participants/shootspi',
-      authStore.authToken,
-    )
-    information.value = data
   } catch (err) {
     error.value = err instanceof Error ? err.message : 'Failed to fetch data'
     console.error('Error fetching participant data:', err)
@@ -55,9 +55,9 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="flex flex-col gap-3 py-5 px-2">
+  <div class="flex flex-col gap-12 py-5 px-2 items-center">
     <h1 class="text-3xl text-justwhite-500 text-center">Participant</h1>
-
+    <img :src="avatarImage" class="rounded-full w-30 h-30" alt="avatar"/>
     <div v-if="loading" class="text-lightgray-300 text-center">
       <p>Loading...</p>
     </div>
@@ -76,8 +76,8 @@ onMounted(async () => {
       <p>Ник: {{ information.login }}</p>
       <p>Волна: {{ information.className }}</p>
       <p>
-        Уровень: {{ information.level }} Опыт: {{ information.expValue }} /
-        {{ information.expValue + information.expToNextLevel }}
+        Уровень: {{ information.level }} [Опыт: {{ information.expValue }} /
+        {{ information.expValue + information.expToNextLevel }}]
       </p>
       <p>Кампус: {{ information.campus?.shortName }}</p>
     </div>
