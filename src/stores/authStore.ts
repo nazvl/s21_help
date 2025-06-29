@@ -1,15 +1,17 @@
 import { defineStore } from 'pinia'
-import { ref, toRaw } from 'vue'
+import { ref, toRaw, computed } from 'vue'
 import { getToken } from '@/api/getToken.ts'
 import { setItem } from '@/stores/idb.ts'
+
 export const useAuthStore = defineStore('user', () => {
   const user = ref({})
   const username = ref<string>('')
   const isLoggedIn = ref<boolean>(false)
+  const authToken = computed(() => user.value.access_token as string)
 
   function logout() {
     user.value = {}
-    isLoggedIn.value = false
+    isLoggedIn.value = false // добавить таймер деавторизации
     username.value = ''
   }
 
@@ -39,6 +41,7 @@ export const useAuthStore = defineStore('user', () => {
     isLoggedIn,
     login,
     logout,
+    authToken,
     // validatePassword,
   }
 })
