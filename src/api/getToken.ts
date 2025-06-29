@@ -1,5 +1,9 @@
+const CORS_PROXY = 'https://corsproxy.io/?'
+
 export async function getToken(login: string, password: string) {
-  const response = await fetch('/api/token', {
+  const tokenUrl = `${CORS_PROXY}https://auth.sberclass.ru/auth/realms/EduPowerKeycloak/protocol/openid-connect/token`
+
+  const response = await fetch(tokenUrl, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
@@ -18,4 +22,3 @@ export async function getToken(login: string, password: string) {
 
   return response.json()
 }
-

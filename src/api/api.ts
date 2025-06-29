@@ -5,8 +5,10 @@ export async function sendRequest(request: string, authToken: string) {
     throw new Error('Токен авторизации отсутствует')
   }
 
+  const proxyUrl = `${request}`
+
   try {
-    const response = await fetch(request, {
+    const response = await fetch(proxyUrl, {
       method: 'GET',
       headers: {
         Accept: '*/*',
