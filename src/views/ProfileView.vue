@@ -16,7 +16,14 @@ interface ParticipantInfo {
   }
 }
 
+interface PointsInfo {
+  peerReviewPoints: number
+  codeReviewPoints: number
+  coins: number
+}
+
 const information = ref<ParticipantInfo | null>(null)
+const points = ref<PointsInfo | null>(null)
 const authStore = useAuthStore()
 const router = useRouter()
 const loading = ref(true)
@@ -30,6 +37,10 @@ async function fetchData() {
     if (authStore.authToken) {
       information.value = await sendRequest(
         'https://edu-api.21-school.ru/services/21-school/api/v1/participants/shootspi',
+        authStore.authToken,
+      )
+      points.value = await sendRequest(
+        'https://edu-api.21-school.ru/services/21-school/api/v1/participants/shootspi/points',
         authStore.authToken,
       )
     } else {
@@ -79,6 +90,12 @@ function logout() {
 
     <div v-else-if="information" class="text-lightgray-300 text-center">
       <p>Ник: {{ information.login }}</p>
+      <div class="flex w-full gap-2 items-center justify-center">
+        <p class="bg-green-500 inline text-black rounded py-0.5 px-1">
+          PRP: {{ points?.codeReviewPoints }}
+        </p>
+        <p class="bg-yellow-500 inline text-black rounded py-0.5 px-1">PRP: {{ points?.coins }}</p>
+      </div>
       <p>Волна: {{ information.className }}</p>
       <p>
         Уровень: {{ information.level }} [Опыт: {{ information.expValue }} /
