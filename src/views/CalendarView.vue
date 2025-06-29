@@ -21,6 +21,7 @@ const tomorrowISO = ref('')
 
 const authStore = useAuthStore()
 const calendar = ref<Event[] | null>(null)
+const loading = ref(true)
 
 // Форматирует ISO дату в удобочитаемую строку на русском
 function formatDateTime(isoString: string): string {
@@ -48,6 +49,7 @@ async function handleCalendar() {
       authStore.authToken,
     )
     calendar.value = response.events
+    loading.value = false
   } catch (err) {
     console.error('Ошибка загрузки событий:', err)
   }
@@ -60,7 +62,7 @@ onMounted(() => {
 
 <template>
   <div class="flex flex-col gap-3 p-3">
-    <template v-if="calendar && calendar.length > 0">
+    <template v-if="loading">
       <div
         v-for="event in calendar"
         :key="event.id"

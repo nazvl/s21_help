@@ -34,7 +34,7 @@ async function fetchData() {
     loading.value = true
     error.value = ''
 
-    if (authStore.authToken) {
+    if (authStore.authToken) { // TODO: отражение текущего места в кампусе
       information.value = await sendRequest(
         'https://edu-api.21-school.ru/services/21-school/api/v1/participants/shootspi',
         authStore.authToken,
@@ -88,22 +88,22 @@ function logout() {
       </button>
     </div>
 
-    <div v-else-if="information" class="text-lightgray-300 text-center">
-      <p>Ник: {{ information.login }}</p>
+    <div v-else-if="information" class="text-lightgray-300 text-center flex flex-col gap-3">
+      <p class="border inline w-auto p-1 border-greenforbuttons-500 rounded-full"> {{ information.login }}</p>
       <div class="flex w-full gap-2 items-center justify-center">
         <p class="bg-green-500 inline text-black rounded py-0.5 px-1">
           PRP: {{ points?.codeReviewPoints }}
         </p>
         <p class="bg-yellow-500 inline text-black rounded py-0.5 px-1">PRP: {{ points?.coins }}</p>
       </div>
-      <p>Волна: {{ information.className }}</p>
+      <p>{{ information.className }}</p>
       <p>
-        Уровень: {{ information.level }} [Опыт: {{ information.expValue }} /
+        Level: {{ information.level }} [Опыт: {{ information.expValue }} /
         {{ information.expValue + information.expToNextLevel }}]
       </p>
-      <p>Кампус: {{ information.campus?.shortName }}</p>
-      <button @click="logout" class="border rounded p-3 mt-3 bg-red-500 text-white">Logout</button>
+
     </div>
+    <button @click="logout" class="border rounded p-3 mt-3 bg-red-500 text-white">Logout</button>
   </div>
 </template>
 

@@ -46,7 +46,7 @@ async function handleLogin() {
         v-model="password"
       />
       <button
-        class="bg-greenforbuttons-500 w-80 text-justwhite-500 font-bold text-lg rounded-xl h-11"
+        class="bg-greenforbuttons-500 w-80 text-justwhite-500 font-bold text-lg rounded-xl h-11 transition active:bg-darkgreen-800"
         @click="handleLogin"
       >
         Login
