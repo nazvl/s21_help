@@ -94,7 +94,7 @@ function logout() {
         <p class="bg-green-500 inline text-black rounded py-0.5 px-1">
           PRP: {{ points?.codeReviewPoints }}
         </p>
-        <p class="bg-yellow-500 inline text-black rounded py-0.5 px-1">PRP: {{ points?.coins }}</p>
+        <p class="bg-yellow-500 inline text-black rounded py-0.5 px-1">Coins: {{ points?.coins }}</p>
       </div>
       <p>{{ information.className }}</p>
       <p>
