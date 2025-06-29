@@ -13,7 +13,7 @@ const error = ref('')
 async function handleLogin() {
   try {
     const res = await authStore.login(login.value, password.value)
-    if (res && res.access_token) {
+    if (res) {
       await router.push('/')
     } else {
       error.value = 'Токен не получен'
