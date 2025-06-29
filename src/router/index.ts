@@ -3,6 +3,7 @@ import HomeView from '@/views/HomeView.vue'
 import LoginView from '@/views/LoginView.vue'
 import ProfileView from '@/views/ProfileView.vue'
 import CalendarView from '@/views/CalendarView.vue'
+import ProjectView from '@/views/ProjectView.vue'
 import { useAuthStore } from '@/stores/authStore'
 
 const router = createRouter({
@@ -28,6 +29,11 @@ const router = createRouter({
       name: 'calendar',
       component: CalendarView,
     },
+    {
+      path: '/projects',
+      name: 'name',
+      component: ProjectView,
+    }
   ],
 })
 
