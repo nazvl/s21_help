@@ -2,15 +2,51 @@
 import { sendRequest } from '@/api/api.ts'
 import { ref, onMounted } from 'vue'
 import { useAuthStore } from '@/stores/authStore'
+import { useRouter } from 'vue-router'
 
-const information = ref('')
+interface ParticipantInfo {
+  login: string
+  className: string
+  level: number
+  expValue: number
+  expToNextLevel: number
+  campus: {
+    shortName: string
+  }
+}
+
+const information = ref<ParticipantInfo | null>(null)
 const authStore = useAuthStore()
+const router = useRouter()
+const loading = ref(true)
+const error = ref('')
 
 async function fetchData() {
-  information.value = await sendRequest(
-    'https://edu-api.21-school.ru/services/21-school/api/v1/participants/shootspi',
-    authStore.authToken,
-  )
+  try {
+    loading.value = true
+    error.value = ''
+
+    if (!authStore.authToken) {
+      throw new Error('Токен авторизации отсутствует')
+    }
+
+    const data = await sendRequest(
+      'https://edu-api.21-school.ru/services/21-school/api/v1/participants/shootspi',
+      authStore.authToken,
+    )
+    information.value = data
+  } catch (err) {
+    error.value = err instanceof Error ? err.message : 'Failed to fetch data'
+    console.error('Error fetching participant data:', err)
+
+    // Если ошибка авторизации, перенаправляем на логин
+    if (err instanceof Error && err.message.includes('авторизации')) {
+      await authStore.logout()
+      router.push('/login')
+    }
+  } finally {
+    loading.value = false
+  }
 }
 
 onMounted(async () => {
@@ -19,10 +55,33 @@ onMounted(async () => {
 </script>
 
 <template>
-  {{ information }}
-  <h1>
-    Ник: {{ information.login }} Волна: {{ information.className }} Уровень: {{ information.level }}
-  </h1>
+  <div class="flex flex-col gap-3 py-5 px-2">
+    <h1 class="text-3xl text-justwhite-500 text-center">Participant</h1>
+
+    <div v-if="loading" class="text-lightgray-300 text-center">
+      <p>Loading...</p>
+    </div>
+
+    <div v-else-if="error" class="text-red-400 text-center">
+      <p>Error: {{ error }}</p>
+      <button
+        @click="fetchData"
+        class="mt-2 px-4 py-2 bg-greenforbuttons-500 rounded text-justwhite-500"
+      >
+        Повторить
+      </button>
+    </div>
+
+    <div v-else-if="information" class="text-lightgray-300 text-center">
+      <p>Ник: {{ information.login }}</p>
+      <p>Волна: {{ information.className }}</p>
+      <p>
+        Уровень: {{ information.level }} Опыт: {{ information.expValue }} /
+        {{ information.expValue + information.expToNextLevel }}
+      </p>
+      <p>Кампус: {{ information.campus?.shortName }}</p>
+    </div>
+  </div>
 </template>
 
 <style scoped></style>

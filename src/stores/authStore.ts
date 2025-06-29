@@ -1,23 +1,50 @@
 import { defineStore } from 'pinia'
 import { ref, toRaw, computed } from 'vue'
 import { getToken } from '@/api/getToken.ts'
-import { setItem } from '@/stores/idb.ts'
+import { setItem, removeItem, getItem } from '@/stores/idb.ts'
+
+interface User {
+  access_token?: string
+  refresh_token?: string
+  token_type?: string
+  expires_in?: number
+}
 
 export const useAuthStore = defineStore('user', () => {
-  const user = ref({})
+  const user = ref<User>({})
   const username = ref<string>('')
   const isLoggedIn = ref<boolean>(false)
-  const authToken = computed(() => user.value.access_token as string)
+  const authToken = computed(() => user.value.access_token || '')
 
-  function logout() {
+  async function logout() {
     user.value = {}
-    isLoggedIn.value = false // добавить таймер деавторизации
+    isLoggedIn.value = false
     username.value = ''
+    await removeItem('user')
+    await removeItem('username')
+  }
+
+  async function getDataFromDb() {
+    try {
+      const storedUser = await getItem<User>('user')
+      const storedUsername = await getItem<string>('username')
+
+      if (storedUser && storedUser.access_token) {
+        user.value = storedUser
+        isLoggedIn.value = true
+      }
+      if (storedUsername) {
+        username.value = storedUsername
+      }
+    } catch (error) {
+      console.error('Error loading data from IndexedDB:', error)
+    }
   }
 
   async function login(login: string, password: string) {
     try {
-      user.value = await getToken(login, password)
+      const tokenData = await getToken(login, password)
+      user.value = tokenData
       username.value = login || ''
       isLoggedIn.value = true
       await setItem('user', toRaw(user.value))
@@ -31,10 +58,6 @@ export const useAuthStore = defineStore('user', () => {
     }
   }
 
-  // async function validatePassword(password: string) {
-  //   // Логика валидации пароля
-  // }
-
   return {
     user,
     username,
@@ -42,6 +65,6 @@ export const useAuthStore = defineStore('user', () => {
     login,
     logout,
     authToken,
-    // validatePassword,
+    getDataFromDb,
   }
 })
