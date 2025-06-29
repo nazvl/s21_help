@@ -1,23 +1,28 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
 import { ref } from 'vue'
-import { getToken } from '@/api/getToken.ts'
+import { useAuthStore } from '@/stores/authStore'
 
 const router = useRouter()
+const authStore = useAuthStore()
 
-const login = ref<string>('')
-const password = ref<string>('')
+const login = ref('')
+const password = ref('')
+const error = ref('')
 
 async function handleLogin() {
   try {
-    const res = await getToken(login.value, password.value)
-    console.log(res)
-    await router.push('/');
+    const res = await authStore.login(login.value, password.value)
+    if (res && res.access_token) {
+      await router.push('/')
+    } else {
+      error.value = 'Токен не получен'
+    }
   } catch (err) {
+    error.value = err instanceof Error ? err.message : String(err)
     console.log(err)
   }
 }
-
 </script>
 
 <template>
@@ -44,6 +49,8 @@ async function handleLogin() {
       >
         Login
       </button>
+
+      <p v-if="error != ''" class="bg-red-400 rounded px-3">{{ error }}</p>
     </div>
   </div>
 </template>

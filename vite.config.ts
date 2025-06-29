@@ -5,6 +5,22 @@ import path from 'path'
 import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
+  server: {
+    proxy: {
+      '/api/token': {
+        target: 'https://auth.sberclass.ru',
+        changeOrigin: true,
+        rewrite: (path) =>
+          path.replace(/^\/api\/token/, '/auth/realms/EduPowerKeycloak/protocol/openid-connect/token'),
+      },
+      '/api/21school': {
+        target: 'https://edu-api.21-school.ru',
+        changeOrigin: true,
+        rewrite: (path) =>
+          path.replace(/^\/api\/21school/, '/services/21-school/api/v1'),
+      },
+    },
+  },
   plugins: [
     vue(),
     tailwindcss(),

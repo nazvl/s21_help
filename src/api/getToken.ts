@@ -1,5 +1,5 @@
 export async function getToken(login: string, password: string) {
-  const response = await fetch('https://auth.sberclass.ru/auth/realms/EduPowerKeycloak/protocol/openid-connect/token', {
+  const response = await fetch('/api/token', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
@@ -18,3 +18,4 @@ export async function getToken(login: string, password: string) {
 
   return response.json()
 }
+
