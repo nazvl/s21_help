@@ -12,7 +12,7 @@ const error = ref('')
 
 async function handleLogin() {
   try {
-    const res = await authStore.login(login.value, password.value)
+    const res = await authStore.login(login.value.toLowerCase(), password.value)
     if (res) {
       // Проверяем есть ли redirect параметр
       const redirect = router.currentRoute.value.query.redirect as string
