@@ -28,6 +28,7 @@ const authStore = useAuthStore()
 const router = useRouter()
 const loading = ref(true)
 const error = ref('')
+const username = ref<string>(authStore.username)
 
 async function fetchData() {
   try {
@@ -37,11 +38,11 @@ async function fetchData() {
     if (authStore.authToken) {
       // TODO: отражение текущего места в кампусе
       information.value = await sendRequest(
-        `https://edu-api.21-school.ru/services/21-school/api/v1/participants/${authStore.username}`,
+        `https://edu-api.21-school.ru/services/21-school/api/v1/participants/${username.value}`,
         authStore.authToken,
       )
       points.value = await sendRequest(
-        `https://edu-api.21-school.ru/services/21-school/api/v1/participants/${authStore.username}/points`,
+        `https://edu-api.21-school.ru/services/21-school/api/v1/participants/${username.value}/points`,
         authStore.authToken,
       )
     } else {
