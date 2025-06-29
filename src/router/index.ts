@@ -21,23 +21,28 @@ const router = createRouter({
       path: '/profile',
       name: 'profile',
       component: ProfileView,
-      meta: { requiresAuth: true },
     },
   ],
 })
 
+// Флаг для отслеживания инициализации
+let isInitialized = false
+
 router.beforeEach(async (to, from, next) => {
   const authStore = useAuthStore()
 
-  // Инициализируем данные из IndexedDB если еще не загружены
-  if (!authStore.isLoggedIn) {
+  // Инициализируем данные из IndexedDB только один раз
+  if (!isInitialized) {
     await authStore.getDataFromDb()
+    isInitialized = true
   }
 
-  if (to.meta.requiresAuth && !authStore.isLoggedIn) {
-    next('/login')
-  } else if (to.path === '/login' && authStore.isLoggedIn) {
-    next('/')
+  // Если пользователь не авторизован и пытается зайти не на логин - редиректим на логин
+  if (!authStore.isLoggedIn && to.name !== 'login') {
+    next({ name: 'login', query: { redirect: to.fullPath } })
+  } else if (to.name === 'login' && authStore.isLoggedIn) {
+    // Если пользователь авторизован и пытается зайти на логин, редиректим на главную
+    next({ name: 'home' })
   } else {
     next()
   }

@@ -14,7 +14,9 @@ async function handleLogin() {
   try {
     const res = await authStore.login(login.value, password.value)
     if (res) {
-      await router.push('/')
+      // Проверяем есть ли redirect параметр
+      const redirect = router.currentRoute.value.query.redirect as string
+      await router.push(redirect || '/')
     } else {
       error.value = 'Токен не получен'
     }
