@@ -20,7 +20,7 @@ function openDB(): Promise<IDBDatabase> {
 }
 
 // Устанавливает значение value по ключу key
-async function setItem(key: string, value: string): Promise<void> {
+async function setItem(key: string, value: any): Promise<void> {
   const db = await openDB()
   return new Promise((resolve, reject) => {
     const tx = db.transaction(STORE_NAME, 'readwrite')
