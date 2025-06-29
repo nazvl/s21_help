@@ -31,8 +31,8 @@ export default defineConfig({
         short_name: 's21',
         start_url: '/',
         display: 'standalone',
-        background_color: '#ecf6ec',
-        theme_color: '#ecf6ec',
+        background_color: '#171A1C',
+        theme_color: '#171A1C',
         icons: [
           { src: '/logo.png', sizes: '192x192', type: 'image/png' },
           { src: '/logo.png', sizes: '512x512', type: 'image/png' },
