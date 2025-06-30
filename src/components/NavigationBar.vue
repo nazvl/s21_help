@@ -55,7 +55,7 @@ function onNavigateTo(to: string) {
 </script>
 
 <template>
-  <div class="fixed bottom-0 w-full h-24 bg-lightgray-900 border-t border-t-lightgray-300">
+  <div class="sticky bottom-0 w-full h-24 bg-lightgray-900 border-t border-t-lightgray-300">
     <ul class="flex items-center h-full text-justwhite-500 justify-around pb-8">
       <li v-for="link in links" :key="link.name">
         <button
