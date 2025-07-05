@@ -233,7 +233,7 @@ Custom color scheme defined in `main.css`:
 
 ### Common Issues
 
-1. **Authentication fails**: Check credentials and network connectivity
+1. **Authentication fails**: Check credentials and network connectivity ```Могут быть проблемы при отправке запросов с российских IP```
 2. **API errors**: Verify token validity and API endpoint availability
 3. **Data not loading**: Check IndexedDB storage and clear if needed
 4. **Navigation issues**: Ensure proper route configuration
@@ -253,7 +253,3 @@ console.log('API Request:', request, authToken)
 3. Make your changes
 4. Test thoroughly
 5. Submit a pull request
-
-## License
-
-This project is for educational purposes as part of School 21 curriculum.
