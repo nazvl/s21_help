@@ -1,6 +1,6 @@
-const DB_NAME = 'DB21'        // Имя базы данных
-const STORE_NAME = 'keyval'       // Имя объектного хранилища (store)
-const DB_VERSION = 1              // Версия базы данных
+const DB_NAME = 'DB21' // Имя базы данных
+const STORE_NAME = 'keyval' // Имя объектного хранилища (store)
+const DB_VERSION = 1 // Версия базы данных
 
 // Открывает IndexedDB и возвращает Promise с объектом IDBDatabase
 function openDB(): Promise<IDBDatabase> {
@@ -20,6 +20,7 @@ function openDB(): Promise<IDBDatabase> {
 }
 
 // Устанавливает значение value по ключу key
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function setItem(key: string, value: any): Promise<void> {
   const db = await openDB()
   return new Promise((resolve, reject) => {
@@ -58,8 +59,4 @@ async function removeItem(key: string): Promise<void> {
   })
 }
 
-export {
-  removeItem,
-  getItem,
-  setItem,
-}
+export { removeItem, getItem, setItem }

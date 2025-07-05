@@ -22,7 +22,7 @@ watch(
     }
     currentLink.value = newPath // запись текущего маршрута в переменную при изменении
   },
-  { immediate: true }
+  { immediate: true },
 )
 
 const links: Link[] = [
@@ -61,9 +61,11 @@ function onNavigateTo(to: string) {
         <button
           class="flex items-center gap-[5px] justify-center flex-col w-full h-full p-2 border-b transition-colors duration-300"
           @click="onNavigateTo(link.to)"
-          :class="{ 'border-b-transparent': currentLink !== link.to, 'border-b-blue-600': currentLink === link.to }"
+          :class="{
+            'border-b-transparent': currentLink !== link.to,
+            'border-b-blue-600': currentLink === link.to,
+          }"
         >
-
           <component :is="link.icon" class="w-6 h-6" />
           <p class="text-xs text-lightgray-300">{{ link.name }}</p>
         </button>
@@ -72,6 +74,4 @@ function onNavigateTo(to: string) {
   </div>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

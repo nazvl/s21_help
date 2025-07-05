@@ -27,8 +27,6 @@ onMounted(async () => {
   await fetchCampuses()
 })
 
-
-
 async function fetchCampuses() {
   try {
     const res = await sendRequest(
@@ -54,7 +52,11 @@ async function fetchCampuses() {
   <h1 class="text-white text-4xl text-center my-5">Welcome</h1>
   <div v-if="loading" class="text-center text-lightgray-300">Loading data...</div>
   <div v-else class="flex gap-5 flex-wrap p-5">
-    <div v-for="campus in campuses" :key="campus.id" class="p-5 border text-center border-greenforbuttons-500 rounded">
+    <div
+      v-for="campus in campuses"
+      :key="campus.id"
+      class="p-5 border text-center border-greenforbuttons-500 rounded"
+    >
       <button class="text-lightgray-300">
         {{ campus.shortName }}
       </button>

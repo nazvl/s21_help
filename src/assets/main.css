@@ -1,4 +1,5 @@
 @import "tailwindcss";
+
 @theme {
   --color-lightgray-500: #2E363D;
   --color-lightgray-900: #171A1C;

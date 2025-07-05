@@ -34,8 +34,8 @@ function formatDateTime(isoString: string): string {
   })
 }
 
-const addDays:number = 30;
-const msPerDay:number = 86400000;
+const addDays: number = 30
+const msPerDay: number = 86400000
 
 // Обновляет todayISO и tomorrowISO с временем 00:00:00
 function updateDates() {

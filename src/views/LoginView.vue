@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
-import { ref} from 'vue'
+import { ref } from 'vue'
 import { useAuthStore } from '@/stores/authStore'
 
 const router = useRouter()
@@ -10,7 +10,7 @@ const login = ref('')
 const password = ref('')
 const error = ref('')
 
-const isSaveData = ref<boolean>(false);
+const isSaveData = ref<boolean>(false)
 
 async function handleLogin() {
   try {
@@ -18,8 +18,8 @@ async function handleLogin() {
     if (res) {
       // Проверяем есть ли redirect параметр
       const redirect = router.currentRoute.value.query.redirect as string
-      if(isSaveData.value) {
-        await authStore.saveData(login.value, password.value);
+      if (isSaveData.value) {
+        await authStore.saveData(login.value, password.value)
       }
       await router.push(redirect || '/')
     } else {
@@ -51,7 +51,7 @@ async function handleLogin() {
         v-model="password"
       />
       <label for="isNeedSave" class="text-xs flex gap-2 text-lightgray-300">
-        <input type="checkbox" id="isNeedSave" v-model="isSaveData">
+        <input type="checkbox" id="isNeedSave" v-model="isSaveData" />
         Save Password <span class="text-red-400">(Unsafe)</span>
       </label>
 

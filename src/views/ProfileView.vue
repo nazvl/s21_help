@@ -23,10 +23,10 @@ interface PointsInfo {
 }
 
 interface Place {
-  clusterId?: number,
-  clusterName?: string,
-  row?: string,
-  number?: number,
+  clusterId?: number
+  clusterName?: string
+  row?: string
+  number?: number
 }
 
 const information = ref<ParticipantInfo | null>(null)
@@ -38,55 +38,61 @@ const error = ref('')
 const username = ref<string>(authStore.username)
 const place = ref<null | Place>(null)
 
-
 async function fetchData() {
   try {
-    loading.value = true;
-    error.value = '';
+    loading.value = true
+    error.value = ''
 
     if (!username.value) {
-      throw new Error('Имя пользователя не задано');
+      throw new Error('Имя пользователя не задано')
     }
 
     if (authStore.authToken) {
       const [info, pts, plc] = await Promise.all([
-        sendRequest(`https://edu-api.21-school.ru/services/21-school/api/v1/participants/${username.value}`, authStore.authToken),
-        sendRequest(`https://edu-api.21-school.ru/services/21-school/api/v1/participants/${username.value}/points`, authStore.authToken),
-        sendRequest(`https://edu-api.21-school.ru/services/21-school/api/v1/participants/${username.value}/workstation`, authStore.authToken)
-
-      ]);
-      information.value = info;
-      points.value = pts;
+        sendRequest(
+          `https://edu-api.21-school.ru/services/21-school/api/v1/participants/${username.value}`,
+          authStore.authToken,
+        ),
+        sendRequest(
+          `https://edu-api.21-school.ru/services/21-school/api/v1/participants/${username.value}/points`,
+          authStore.authToken,
+        ),
+        sendRequest(
+          `https://edu-api.21-school.ru/services/21-school/api/v1/participants/${username.value}/workstation`,
+          authStore.authToken,
+        ),
+      ])
+      information.value = info
+      points.value = pts
       if (!plc) {
-        place.value = null;
+        place.value = null
       } else {
-        place.value = plc;
+        place.value = plc
       }
     } else {
-      throw new Error('Токен авторизации отсутствует');
+      throw new Error('Токен авторизации отсутствует')
     }
   } catch (err) {
-    error.value = err instanceof Error ? err.message : 'Failed to fetch data';
-    console.error('Error fetching participant data:', err);
+    error.value = err instanceof Error ? err.message : 'Failed to fetch data'
+    console.error('Error fetching participant data:', err)
 
     if (err instanceof Error && err.message.includes('авторизации')) {
-      await authStore.logout();
-      await router.push('/login');
+      await authStore.logout()
+      await router.push('/login')
     }
   } finally {
-    loading.value = false;
+    loading.value = false
   }
 }
-
 
 onMounted(async () => {
   await fetchData()
 })
 
 async function logout() {
-  const button:boolean = true;
+  const button: boolean = true
 
-  await authStore.logout(button);
+  await authStore.logout(button)
   router.push('/')
 }
 </script>

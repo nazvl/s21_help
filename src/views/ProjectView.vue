@@ -43,9 +43,8 @@ async function fetchData() {
     })
   } catch (err) {
     console.log(err)
-  }
-  finally {
-    loading.value = false;
+  } finally {
+    loading.value = false
   }
 }
 
@@ -76,7 +75,8 @@ onMounted(() => {
         }"
         class="w-60 px-1 rounded"
       >
-        Status: {{ project.status }} <span v-if="project.finalPercentage > 30">( {{ project.finalPercentage }} % )</span>
+        Status: {{ project.status }}
+        <span v-if="project.finalPercentage > 30">( {{ project.finalPercentage }} % )</span>
       </p>
     </div>
   </div>
