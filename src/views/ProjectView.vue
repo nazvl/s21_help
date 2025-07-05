@@ -55,6 +55,8 @@ onMounted(() => {
 </script>
 
 <template>
+  <h1 class="text-3xl text-justwhite-500 text-center mt-3">Projects</h1>
+
   <div v-if="loading">
     <p>Loading project Data</p>
   </div>

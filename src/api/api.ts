@@ -23,7 +23,8 @@ export async function sendRequest(request: string, authToken: string) {
       throw new Error(`Ошибка: ${response.status} - ${response.statusText}`)
     }
 
-    return response.json()
+    const text = await response.text()
+    return text ? JSON.parse(text) : null
   } catch (error) {
     console.error('API request failed:', error)
     throw error

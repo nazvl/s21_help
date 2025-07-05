@@ -65,6 +65,7 @@ onMounted(() => {
 </script>
 
 <template>
+  <h1 class="text-3xl text-justwhite-500 text-center mt-3">Event Calendar</h1>
   <div class="flex flex-col gap-3 p-3">
     <p v-if="loading" class="text-justwhite-500 text-center">Events loading...</p>
     <template v-else>

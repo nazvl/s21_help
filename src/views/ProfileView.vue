@@ -22,6 +22,13 @@ interface PointsInfo {
   coins: number
 }
 
+interface Place {
+  clusterId?: number,
+  clusterName?: string,
+  row?: string,
+  number?: number,
+}
+
 const information = ref<ParticipantInfo | null>(null)
 const points = ref<PointsInfo | null>(null)
 const authStore = useAuthStore()
@@ -29,6 +36,8 @@ const router = useRouter()
 const loading = ref(true)
 const error = ref('')
 const username = ref<string>(authStore.username)
+const place = ref<null | Place>(null)
+
 
 async function fetchData() {
   try {
@@ -40,12 +49,19 @@ async function fetchData() {
     }
 
     if (authStore.authToken) {
-      const [info, pts] = await Promise.all([
+      const [info, pts, plc] = await Promise.all([
         sendRequest(`https://edu-api.21-school.ru/services/21-school/api/v1/participants/${username.value}`, authStore.authToken),
         sendRequest(`https://edu-api.21-school.ru/services/21-school/api/v1/participants/${username.value}/points`, authStore.authToken),
+        sendRequest(`https://edu-api.21-school.ru/services/21-school/api/v1/participants/${username.value}/workstation`, authStore.authToken)
+
       ]);
       information.value = info;
       points.value = pts;
+      if (!plc) {
+        place.value = null;
+      } else {
+        place.value = plc;
+      }
     } else {
       throw new Error('Токен авторизации отсутствует');
     }
@@ -109,6 +125,9 @@ async function logout() {
       <p>
         Level: {{ information.level }} [Опыт: {{ information.expValue }} /
         {{ information.expValue + information.expToNextLevel }}]
+      </p>
+      <p v-if="place">
+        {{ place }}
       </p>
     </div>
     <button @click="logout" class="border rounded p-3 mt-3 bg-red-500 text-white">Logout</button>
