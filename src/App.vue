@@ -14,7 +14,9 @@ onMounted(async () => {
 </script>
 
 <template>
-  <RouterView />
+  <div class="pb-24">
+    <RouterView />
+  </div>
   <NavigationBar v-if="route.path !== '/login'" />
 </template>
 
