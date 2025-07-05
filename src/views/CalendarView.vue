@@ -21,7 +21,7 @@ const tomorrowISO = ref('')
 
 const authStore = useAuthStore()
 const calendar = ref<Event[] | null>(null)
-const loading = ref(true)
+const loading = ref<boolean>(true)
 
 // Форматирует ISO дату в удобочитаемую строку на русском
 function formatDateTime(isoString: string): string {
@@ -34,8 +34,8 @@ function formatDateTime(isoString: string): string {
   })
 }
 
-const addDays = 30
-const msPerDay = 86400000
+const addDays:number = 30;
+const msPerDay:number = 86400000;
 
 // Обновляет todayISO и tomorrowISO с временем 00:00:00
 function updateDates() {
