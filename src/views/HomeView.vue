@@ -65,7 +65,6 @@ async function fetchLocalCampus() {
       </button>
     </div>
   </div>
-
 </template>
 
 <style scoped></style>
