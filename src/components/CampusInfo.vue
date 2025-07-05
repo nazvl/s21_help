@@ -10,7 +10,7 @@ const authStore = useAuthStore()
 const props = defineProps<{
   campusId: string
 }>()
-
+// https://edu-api.21-school.ru/services/21-school/api/v1/clusters/825/map?limit=50&offset=0&occupied=true - апи кластер мапы
 interface Cluster {
   id: number
   name: string
