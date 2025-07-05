@@ -34,10 +34,13 @@ function formatDateTime(isoString: string): string {
   })
 }
 
+const addDays = 30
+const msPerDay = 86400000
+
 // Обновляет todayISO и tomorrowISO с временем 00:00:00
 function updateDates() {
   todayISO.value = new Date(new Date().setHours(0, 0, 0, 0)).toISOString()
-  tomorrowISO.value = new Date(new Date().setHours(0, 0, 0, 0) + 86400000).toISOString()
+  tomorrowISO.value = new Date(new Date().setHours(0, 0, 0, 0) + addDays * msPerDay).toISOString() //
 }
 
 // Загружает события с API
@@ -50,6 +53,7 @@ async function handleCalendar() {
     )
     calendar.value = response.events
     loading.value = false
+    console.log(calendar.value)
   } catch (err) {
     console.error('Ошибка загрузки событий:', err)
   }
@@ -62,7 +66,8 @@ onMounted(() => {
 
 <template>
   <div class="flex flex-col gap-3 p-3">
-    <template v-if="loading">
+    <p v-if="loading" class="text-justwhite-500 text-center">Events loading...</p>
+    <template v-else>
       <div
         v-for="event in calendar"
         :key="event.id"
@@ -73,7 +78,7 @@ onMounted(() => {
           <span class="border border-gray-400 px-1 rounded">Тип</span>
           {{ event.type }}
         </p>
-        <p>
+        <p v-if="event.description">
           <span class="border border-blue-400 px-1 rounded">Описание</span>
           {{ event.description }}
         </p>
@@ -91,9 +96,7 @@ onMounted(() => {
         </p>
       </div>
     </template>
-    <p v-else class="text-justwhite-500 text-center">Мероприятий не обнаружено :(</p>
   </div>
 </template>
-
 
 <style scoped></style>
