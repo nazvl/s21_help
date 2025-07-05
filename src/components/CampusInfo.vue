@@ -41,8 +41,7 @@ async function fetchClusters(): Promise<void> {
 </script>
 
 <template>
-  <div class="rounded shadow w-full mx-auto">
-    <transition-group name="fade" tag="div" class="space-y-3" move-class="move">
+  <div class="rounded shadow w-full mx-auto flex flex-col gap-1">
       <div
         v-for="cluster in clusters"
         :key="cluster.id"
@@ -53,22 +52,9 @@ async function fetchClusters(): Promise<void> {
           {{ cluster.availableCapacity }} / {{ cluster.capacity }}
         </div>
       </div>
-    </transition-group>
   </div>
 </template>
 
 <style scoped>
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.5s ease;
-}
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
 
-/* Анимация перемещения */
-.move {
-  transition: transform 0.5s ease;
-}
 </style>

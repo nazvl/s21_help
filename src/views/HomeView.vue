@@ -14,8 +14,7 @@ interface Campus {
   fullName: string
 }
 
-const campusId = ref<string>('') // хранит ID кампуса пользователя
-const choosenCampus= ref<string>(campusId.value)
+const campusId = ref<string>('') // хранит ID кампуса пользователя и при изменении
 const campuses = ref<Campus[]>([])
 
 onMounted(async () => {
@@ -53,14 +52,14 @@ async function fetchLocalCampus() {
   <h1 class="text-white text-4xl text-center my-5">Welcome</h1>
   <div v-if="loading" class="text-center text-lightgray-300">Loading data...</div>
   <div v-else class="flex gap-5 flex-wrap p-5">
-    <div class="w-full">  <CampusInfo :campusId="choosenCampus" /></div>
+    <div class="w-full">  <CampusInfo :campusId="campusId" /></div>
     <div
       v-for="campus in campuses"
       :key="campus.id"
       class="p-5 border text-center border-greenforbuttons-500 rounded"
       :class="{'border-red-500': campus.id == campusId}"
     >
-      <button class="text-lightgray-300" @click="choosenCampus = campus.id">
+      <button class="text-lightgray-300" @click="campusId = campus.id">
         {{ campus.shortName }}
       </button>
     </div>
