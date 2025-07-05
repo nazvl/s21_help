@@ -7,6 +7,8 @@ const authStore = useAuthStore()
 const username = ref<string>(authStore.username)
 const projects = ref<Array<Project>>([])
 
+const loading = ref<boolean>(true)
+
 const allowedStatuses = ['REGISTERED', 'IN_PROGRESS', 'IN_REVIEWS', 'ACCEPTED', 'FAILED']
 
 interface Project {
@@ -33,7 +35,7 @@ async function fetchData() {
     )
     projects.value = response.projects.filter((project: Project) =>
       allowedStatuses.includes(project.status),
-    ) // проверка что статус входит в разрешенные
+    ) // проверка, что статус входит в разрешенные
     projects.value.sort((a, b) => {
       if (a.status > b.status) return 1
       if (a.status < b.status) return -1
@@ -41,6 +43,9 @@ async function fetchData() {
     })
   } catch (err) {
     console.log(err)
+  }
+  finally {
+    loading.value = false;
   }
 }
 
@@ -50,23 +55,14 @@ onMounted(() => {
 </script>
 
 <template>
-  <!--  title: string-->
-  <!--  type: string-->
-  <!--  status: string-->
-  <!--  finalPercentage: number-->
-  <!--  completedDateTime: Date-->
-  <!--  teamMembers: [-->
-  <!--  {-->
-  <!--  login: string-->
-  <!--  isTeamLead: boolean-->
-  <!--  },-->
-  <!--  ]-->
-  <!--  courseId: number-->
-  <div class="flex flex-col gap-3 items-center p-5">
+  <div v-if="loading">
+    <p>Loading project Data</p>
+  </div>
+  <div class="flex flex-col gap-3 items-center p-5" v-else>
     <div
       v-for="project in projects"
       :key="project.title"
-      class="text-justwhite-500 flex flex-col border gap-0.5 p-3 w-full min-w-65"
+      class="text-justwhite-500 flex flex-col border gap-0.5 p-3 w-full min-w-65 rounded justify-center"
     >
       <p class="w-64">Name: {{ project.title }}</p>
       <p
@@ -76,7 +72,7 @@ onMounted(() => {
           'bg-blue-500': project.status === 'IN_PROGRESS',
           'bg-yellow-500': project.status === 'IN_REVIEWS',
         }"
-        class="w-60"
+        class="w-60 px-1 rounded"
       >
         Status: {{ project.status }} <span v-if="project.finalPercentage > 30">( {{ project.finalPercentage }} % )</span>
       </p>
