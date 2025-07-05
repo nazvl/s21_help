@@ -15,7 +15,7 @@ interface Campus {
 }
 
 const campusId = ref<string>('') // хранит ID кампуса пользователя
-const choosenCampus: ref<string> = ref(campusId)
+const choosenCampus= ref<string>(campusId.value)
 const campuses = ref<Campus[]>([])
 
 onMounted(async () => {
