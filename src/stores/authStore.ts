@@ -10,6 +10,8 @@ interface User {
   expires_in?: number
 }
 
+let logoutTimer: ReturnType<typeof setTimeout> | null = null
+
 export const useAuthStore = defineStore('user', () => {
   const user = ref<User>({})
   const username = ref<string>('')
@@ -25,6 +27,10 @@ export const useAuthStore = defineStore('user', () => {
     if (clearSavedCreds) {
       await removeItem('savedLogin')
       await removeItem('savedPassword')
+    }
+    if (logoutTimer) {
+      clearTimeout(logoutTimer)
+      logoutTimer = null
     }
   }
 
@@ -52,6 +58,7 @@ export const useAuthStore = defineStore('user', () => {
       isLoggedIn.value = true
       await setItem('user', toRaw(user.value))
       await setItem('username', username.value)
+      scheduleAutoLogout()
       console.log(user.value)
       console.log(username.value)
       return user.value
@@ -65,6 +72,27 @@ export const useAuthStore = defineStore('user', () => {
     await setItem('savedLogin', login)
     await setItem('savedPassword', password)
     console.log('Data saved for:', login)
+  }
+
+  async function scheduleAutoLogout() {
+    if (user.value.expires_in) {
+      if (logoutTimer) clearTimeout(logoutTimer)
+
+      logoutTimer = setTimeout(async () => {
+        console.warn('Token expired — logging out automatically')
+
+        // Пробуем авто-логин, если сохранены логин/пароль
+        const savedLogin = await getItem<string>('savedLogin')
+        const savedPassword = await getItem<string>('savedPassword')
+
+        if (savedLogin && savedPassword) {
+          console.log('Re-logging in with saved credentials...')
+          await login(savedLogin, savedPassword)
+        } else {
+          await logout()
+        }
+      }, user.value.expires_in * 1000)
+    }
   }
 
   return {
