@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
-import { ref } from 'vue'
+import { ref} from 'vue'
 import { useAuthStore } from '@/stores/authStore'
 
 const router = useRouter()
@@ -10,12 +10,17 @@ const login = ref('')
 const password = ref('')
 const error = ref('')
 
+const isSaveData = ref<boolean>(false);
+
 async function handleLogin() {
   try {
     const res = await authStore.login(login.value.toLowerCase(), password.value)
     if (res) {
       // Проверяем есть ли redirect параметр
       const redirect = router.currentRoute.value.query.redirect as string
+      if(isSaveData.value) {
+        await authStore.saveData(login.value, password.value);
+      }
       await router.push(redirect || '/')
     } else {
       error.value = 'Токен не получен'
@@ -45,6 +50,11 @@ async function handleLogin() {
         placeholder="Password"
         v-model="password"
       />
+      <label for="isNeedSave" class="text-xs flex gap-2 text-lightgray-300">
+        <input type="checkbox" id="isNeedSave" v-model="isSaveData">
+        Save Password <span class="text-red-400">(Unsafe)</span>
+      </label>
+
       <button
         class="bg-greenforbuttons-500 w-80 text-justwhite-500 font-bold text-lg rounded-xl h-11 transition active:bg-darkgreen-800"
         @click="handleLogin"

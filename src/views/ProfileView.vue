@@ -46,7 +46,7 @@ async function fetchData() {
         authStore.authToken,
       )
     } else {
-      throw new Error('Токен авторизации отсутствует')
+      console.error('Unable to fetch data');
     }
   } catch (err) {
     error.value = err instanceof Error ? err.message : 'Failed to fetch data'
@@ -66,8 +66,10 @@ onMounted(async () => {
   await fetchData()
 })
 
-function logout() {
-  authStore.logout()
+async function logout() {
+  const button:boolean = true;
+
+  await authStore.logout(button);
   router.push('/')
 }
 </script>

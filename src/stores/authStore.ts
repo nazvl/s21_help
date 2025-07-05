@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
-import { ref, toRaw, computed } from 'vue'
+import { computed, ref, toRaw } from 'vue'
 import { getToken } from '@/api/getToken.ts'
-import { setItem, removeItem, getItem } from '@/stores/idb.ts'
+import { getItem, removeItem, setItem } from '@/stores/idb.ts'
 
 interface User {
   access_token?: string
@@ -16,12 +16,16 @@ export const useAuthStore = defineStore('user', () => {
   const isLoggedIn = ref<boolean>(false)
   const authToken = computed(() => user.value.access_token || '')
 
-  async function logout() {
+  async function logout(clearSavedCreds?: boolean) {
     user.value = {}
     isLoggedIn.value = false
     username.value = ''
     await removeItem('user')
     await removeItem('username')
+    if (clearSavedCreds) {
+      await removeItem('savedLogin')
+      await removeItem('savedPassword')
+    }
   }
 
   async function getDataFromDb() {
@@ -43,8 +47,7 @@ export const useAuthStore = defineStore('user', () => {
 
   async function login(login: string, password: string) {
     try {
-      const tokenData = await getToken(login, password)
-      user.value = tokenData
+      user.value = await getToken(login, password)
       username.value = login || ''
       isLoggedIn.value = true
       await setItem('user', toRaw(user.value))
@@ -58,6 +61,12 @@ export const useAuthStore = defineStore('user', () => {
     }
   }
 
+  async function saveData(login: string, password: string) {
+    await setItem('savedLogin', login)
+    await setItem('savedPassword', password)
+    console.log('Data saved for:', login)
+  }
+
   return {
     user,
     username,
@@ -65,6 +74,7 @@ export const useAuthStore = defineStore('user', () => {
     login,
     logout,
     authToken,
+    saveData,
     getDataFromDb,
   }
 })
