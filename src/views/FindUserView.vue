@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue'
 import UserProfile from '@/components/UserProfile.vue'
 import { useAuthStore } from '@/stores/authStore.ts'
+import ExpandedProfileInfo from '@/components/ExpandedProfileInfo.vue'
 
 const authStore = useAuthStore()
 
@@ -67,6 +68,11 @@ onMounted(() => {
         :username="textSearched"
         :authToken="authStore.authToken"
         :auto-fetch="true"
+      />
+      <ExpandedProfileInfo
+        :key="textSearched"
+        :username="textSearched"
+        :authToken="authStore.authToken"
       />
     </div>
   </div>
