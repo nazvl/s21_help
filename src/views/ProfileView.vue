@@ -22,5 +22,4 @@ function logout() {
   <div class="text-center">
     <button @click="logout" class="border rounded p-3 mt-3 bg-red-500 text-white">Logout</button>
   </div>
-
 </template>

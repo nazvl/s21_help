@@ -2,6 +2,7 @@
 import { onMounted, ref} from 'vue'
 import avatarImage from '@/assets/noavatar.png'
 import { sendRequest } from '@/api/api.ts'
+import LoaderComponent from '@/components/LoaderComponent.vue'
 
 interface Props {
   username: string
@@ -78,7 +79,7 @@ async function fetchData() {
 }
 
 onMounted(() => {
-  if (props.autoFetch !== false) {
+  if (props.autoFetch) {
     fetchData()
   }
 })
@@ -92,7 +93,7 @@ defineExpose({ fetchData }) // Позволяет вызвать fetchData из 
     <img :src="avatarImage" class="rounded-full w-30 h-30" alt="avatar" />
 
     <div v-if="loading" class="text-lightgray-300 text-center">
-      <p>Loading...</p>
+      <LoaderComponent/>
     </div>
 
     <div v-else-if="error" class="text-red-400 text-center">

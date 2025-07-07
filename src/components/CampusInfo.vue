@@ -1,16 +1,15 @@
 <script setup lang="ts">
-//TODO: ИСПРАВИТЬ В ЭТОМ ЭЛЕМЕНТЕ АНИМАЦИЮ И МЕРЦАНИЕ
 import { ref, onMounted, watch } from 'vue'
 import { sendRequest } from '@/api/api.ts'
 import { useAuthStore } from '@/stores/authStore.ts'
+import Loader from '@/components/LoaderComponent.vue'
 
 const authStore = useAuthStore()
 
-// Получаем props и сохраняем в переменную
 const props = defineProps<{
   campusId: string
 }>()
-// https://edu-api.21-school.ru/services/21-school/api/v1/clusters/825/map?limit=50&offset=0&occupied=true - апи кластер мапы
+
 interface Cluster {
   id: number
   name: string
@@ -20,41 +19,51 @@ interface Cluster {
 }
 
 const clusters = ref<Cluster[] | null>(null)
+const isLoading = ref(false)
+
 watch(() => props.campusId, (newId) => {
   if (newId) fetchClusters()
 })
 
 onMounted(async () => {
-  if(props.campusId){
+  if(props.campusId) {
     await fetchClusters()
   }
-
 })
 
 async function fetchClusters(): Promise<void> {
-  const res = await sendRequest(
-    `https://edu-api.21-school.ru/services/21-school/api/v1/campuses/${props.campusId}/clusters`,
-    authStore.authToken,
-  )
-  clusters.value = res.clusters
+  try {
+    isLoading.value = true
+    const res = await sendRequest(
+      `https://edu-api.21-school.ru/services/21-school/api/v1/campuses/${props.campusId}/clusters`,
+      authStore.authToken,
+    )
+    clusters.value = res.clusters
+  } catch (error) {
+    console.error('Error fetching clusters:', error)
+    clusters.value = null
+  } finally {
+    isLoading.value = false
+  }
 }
 </script>
 
 <template>
-  <div class="rounded shadow w-full mx-auto flex flex-col gap-1">
-      <div
-        v-for="cluster in clusters"
-        :key="cluster.id"
-        class="flex justify-between items-center p-3 border border-gray-200 rounded"
-      >
-        <div class="font-medium text-justwhite-500">{{ cluster.name }}</div>
-        <div class="text-sm text-lightgray-300">
-          {{ cluster.availableCapacity }} / {{ cluster.capacity }}
-        </div>
-      </div>
+  <div v-if="isLoading" class="flex justify-center items-center py-8">
+    <Loader/>
   </div>
+
+  <div v-else class="rounded shadow w-full mx-auto flex flex-col gap-1">
+    <div
+      v-for="cluster in clusters"
+      :key="cluster.id"
+      class="flex justify-between items-center p-3 border border-gray-200 rounded"
+    >
+      <div class="font-medium text-justwhite-500">{{ cluster.name }}</div>
+      <div class="text-sm text-lightgray-300">
+        {{ cluster.availableCapacity }} / {{ cluster.capacity }}
+      </div>
+    </div>
+  </div>
+
 </template>
-
-<style scoped>
-
-</style>

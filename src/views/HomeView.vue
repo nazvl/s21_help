@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { onMounted, ref} from 'vue'
+import { onMounted, ref } from 'vue'
 import { sendRequest } from '@/api/api.ts'
 import { useAuthStore } from '@/stores/authStore.ts'
 import CampusInfo from '@/components/CampusInfo.vue'
+import Loader from '@/components/LoaderComponent.vue'
 
 const authStore = useAuthStore()
 const loading = ref<boolean>(true)
@@ -43,21 +44,28 @@ async function fetchCampuses() {
 }
 
 async function fetchLocalCampus() {
-    const res = await sendRequest(`https://edu-api.21-school.ru/services/21-school/api/v1/participants/${authStore.username}`, authStore.authToken);
-    campusId.value = res.campus.id;
+  const res = await sendRequest(
+    `https://edu-api.21-school.ru/services/21-school/api/v1/participants/${authStore.username}`,
+    authStore.authToken,
+  )
+  campusId.value = res.campus.id
 }
 </script>
 
 <template>
   <h1 class="text-white text-4xl text-center my-5">Welcome</h1>
-  <div v-if="loading" class="text-center text-lightgray-300">Loading data...</div>
+  <div v-if="loading" class="">
+    <Loader />
+  </div>
   <div v-else class="flex gap-5 flex-wrap p-5">
-    <div class="w-full">  <CampusInfo :campusId="campusId" /></div>
+    <div class="w-full">
+      <CampusInfo :campusId="campusId" />
+    </div>
     <div
       v-for="campus in campuses"
       :key="campus.id"
       class="p-5 border text-center border-greenforbuttons-500 rounded"
-      :class="{'border-red-500': campus.id == campusId}"
+      :class="{ 'border-red-500': campus.id == campusId }"
     >
       <button class="text-lightgray-300" @click="campusId = campus.id">
         {{ campus.shortName }}

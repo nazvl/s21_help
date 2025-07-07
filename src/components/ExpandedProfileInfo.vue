@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { sendRequest } from '@/api/api.ts'
+import LoaderComponent from '@/components/LoaderComponent.vue'
 
 interface Props {
   username: string
@@ -27,7 +28,7 @@ interface Tribe {
 }
 
 const props = defineProps<Props>()
-const skills = ref<Skill[]>([])
+const skills = ref<Skill[] | null>(null)
 const feedback = ref<Feedback | null>(null)
 const today = ref(getFormattedDate())
 const avgTime = ref<number>(0)
@@ -42,10 +43,11 @@ function getFormattedDate() {
 }
 
 onMounted(async () => {
-  await fetchAvgTime()
-  await fetchFeedback()
-  await fetchSkills()
-  await fetchTribe()
+  try {
+    await Promise.all([fetchAvgTime(), fetchFeedback(), fetchSkills(), fetchTribe()])
+  } catch (e) {
+    console.error('Error fetching data:', e)
+  }
 })
 
 async function fetchSkills() {
@@ -80,17 +82,19 @@ async function fetchTribe() {
 
 <template>
   <div class="text-lightgray-300 text-center">
-    <p class="text-lightgray-300 text-center border inline p-1 rounded">
+    <p v-if="avgTime" class="text-lightgray-300 text-center border inline p-1 rounded">
       Weekly avg time: {{ avgTime }}
     </p>
-    <h3 class="m-3">FeedBack:</h3>
+    <h3 v-if="feedback" class="m-3">FeedBack:</h3>
     <div v-if="feedback" class="items-center flex flex-wrap mb-3 gap-3 justify-center">
       <div v-for="(value, key) in feedback" :key="key" class="border rounded p-1 w-40">
         <p class="">{{ key.toString().replace('averageVerifier', '') }}:</p>
         <p>{{ value }}</p>
       </div>
     </div>
-    <div v-else>Loading feedback...</div>
+    <div v-else>
+      <LoaderComponent />
+    </div>
 
     <div class="flex items-center justify-center">
       <!-- Блок с информацией о tribe -->
@@ -101,16 +105,21 @@ async function fetchTribe() {
           <p>Rank: {{ tribe.rank }}</p>
         </div>
       </div>
-      <div v-else>Loading tribe information...</div>
+      <div v-else>
+        <LoaderComponent />
+      </div>
     </div>
-    <h3 class="p-1 text-lightgray-300 text-center rounded">Skills:</h3>
-    <div class="flex flex-wrap gap-2 items-center justify-center">
+    <h3 v-if="skills" class="p-1 text-lightgray-300 text-center rounded">Skills:</h3>
+    <div v-if="skills" class="flex flex-wrap gap-2 items-center justify-center">
       <div v-for="skill in skills" :key="skill.name" class="text-lightgray-500 flex">
         <div class="flex gap-1 p-1 rounded bg-greenforbuttons-500">
           <p>{{ skill.name }}:</p>
           <p>{{ skill.points }}</p>
         </div>
       </div>
+    </div>
+    <div v-else>
+      <LoaderComponent />
     </div>
   </div>
 </template>
