@@ -5,7 +5,7 @@ import ProfileView from '@/views/ProfileView.vue'
 import CalendarView from '@/views/CalendarView.vue'
 import ProjectView from '@/views/ProjectView.vue'
 import { useAuthStore } from '@/stores/authStore'
-
+import FindUserView from '@/views/FindUserView.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -31,9 +31,14 @@ const router = createRouter({
     },
     {
       path: '/projects',
-      name: 'name',
+      name: 'projects',
       component: ProjectView,
     },
+    {
+      path: '/find',
+      name: 'find',
+      component: FindUserView,
+    }
   ],
 })
 

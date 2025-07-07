@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useRouter, useRoute } from 'vue-router'
-import { HomeIcon, UserIcon, CalendarIcon, AcademicCapIcon } from '@heroicons/vue/24/outline'
+import { HomeIcon, UserIcon, CalendarIcon, AcademicCapIcon, StarIcon } from '@heroicons/vue/24/outline'
 import type { Component } from 'vue'
 import { ref, watch } from 'vue'
 
@@ -45,6 +45,11 @@ const links: Link[] = [
     name: 'Projects',
     to: '/projects',
     icon: AcademicCapIcon,
+  },
+  {
+    name: 'Find',
+    to: '/find',
+    icon: StarIcon,
   },
 ]
 

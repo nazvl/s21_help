@@ -6,9 +6,9 @@ import { useAuthStore } from '@/stores/authStore'
 const router = useRouter()
 const authStore = useAuthStore()
 
-const login = ref('')
-const password = ref('')
-const error = ref('')
+const login = ref<string>('')
+const password = ref<string>('')
+const error = ref<string>('')
 
 const isSaveData = ref<boolean>(false)
 
@@ -41,6 +41,7 @@ async function handleLogin() {
         type="text"
         placeholder="Username"
         v-model="login"
+        @input="login = login.toLowerCase()"
       />
       <input
         class="border rounded bg-lightgray-500 h-12 text-lg text-lightgray-300 p-2 w-80"
