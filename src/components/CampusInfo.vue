@@ -29,7 +29,6 @@ const isLoading = ref(false)
 const isMapOpen = ref(false)
 const choosenCluster = ref<Cluster | null>(null)
 
-
 watch(
   () => props.campusId,
   (newId) => {
@@ -98,7 +97,9 @@ async function fetchMap(choosenClusterId: number) {
     </div>
   </div>
   <div class="fixed inset-0 flex items-center justify-center backdrop-blur-xl" v-if="isMapOpen">
-    <div class="w-full p-3 flex flex-col gap-1 text-white bg-lightgray-500 mx-3 rounded">
+    <div
+      class="w-full p-3 mb-15 flex flex-col gap-1 text-white bg-lightgray-500 mx-3 rounded max-h-[80vh] overflow-y-auto"
+    >
       <h2 class="text-xl text-justwhite-500 font-semibold">
         {{ choosenCluster?.name || 'Нет выбранного кластера' }}
       </h2>
