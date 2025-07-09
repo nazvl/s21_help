@@ -68,12 +68,11 @@ async function fetchLocalCampus() {
       <div
         v-for="campus in campuses"
         :key="campus.id"
-        class="w-full font-serif 0 py-4 px-1 text-sm flex flex-row items-start justify-between"
+        class="w-full font-serif 0 py-4 px-1 text-sm flex flex-row items-start justify-between text-lightgray-300"
       >
         <button
-          class="text-lightgray-300"
           @click="campusId = campus.id"
-          :class="{ 'text-red-300': campus.id == campusId }"
+          :class="{ 'text-greenforbuttons-500': campus.id == campusId }"
         >
           {{ campus.shortName }}
         </button>

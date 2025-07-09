@@ -53,11 +53,11 @@ async function fetchClusters(): Promise<void> {
     <Loader/>
   </div>
 
-  <div class="w-full flex flex-wrap gap-2">
+  <div v-else class="w-full flex flex-wrap gap-2">
     <div
         v-for="cluster in clusters"
         :key="cluster.id"
-        class="border border-b-lightgray-900 rounded p-6 bg-[#293830] grow min-w-[40%] gap-2"
+        class="border border-b-lightgray-900 rounded-md p-6 bg-[#293830] grow min-w-[40%] gap-2"
     >
       <div class="font-bold text-xl text-justwhite-500">{{ cluster.name }}</div>
       <div class="text-xs font-semibold text-lightgray-300">

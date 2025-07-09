@@ -16,12 +16,15 @@ function logout() {
 
 <template>
   <HeaderText text="Participiant" class="mb-4"></HeaderText>
-  <UserProfile
+  <div class="w-full p-3">
+    <UserProfile
       :username="authStore.username"
       :authToken="authStore.authToken"
       :auto-fetch="true"
-  />
-  <div class="text-center">
-    <button @click="logout" class="border rounded p-3 mt-3 bg-red-500 text-white">Logout</button>
+    />
+    <div class="text-center">
+      <button @click="logout" class="rounded-3xl h-12 mt-15 w-full bg-greenforbuttons-500 text-white">Exit</button>
+    </div>
   </div>
+
 </template>

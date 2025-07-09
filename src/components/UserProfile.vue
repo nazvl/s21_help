@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref} from 'vue'
+import { onMounted, ref, computed } from 'vue'
 import avatarImage from '@/assets/noavatar.png'
 import { sendRequest } from '@/api/api.ts'
 import LoaderComponent from '@/components/LoaderComponent.vue'
@@ -42,7 +42,6 @@ const place = ref<Place | null>(null)
 const loading = ref(true)
 const error = ref<string>('')
 
-
 async function fetchData() {
   try {
     loading.value = true
@@ -84,15 +83,30 @@ onMounted(() => {
   }
 })
 
+const expPercentage = computed(() => {
+  if (!information.value) return '0%' // проверка, что information существует
+
+  const current = information.value.expValue
+  const toNext = information.value.expToNextLevel
+  const total = current + toNext
+
+  if (total > 0) {
+    const percent = (current / total) * 100
+    return `${percent.toFixed(2)}%`
+  }
+
+  return '0%'
+})
+
 defineExpose({ fetchData }) // Позволяет вызвать fetchData из родительского компонента
 </script>
 
 <template>
-  <div class="flex flex-col gap-12 py-5 px-2 items-center">
+  <div class="flex flex-col gap-4 py-5 px-2 items-center w-full mx-auto">
     <img :src="avatarImage" class="rounded-full w-30 h-30" alt="avatar" />
 
     <div v-if="loading" class="text-lightgray-300 text-center">
-      <LoaderComponent/>
+      <LoaderComponent />
     </div>
 
     <div v-else-if="error" class="text-red-400 text-center">
@@ -105,26 +119,36 @@ defineExpose({ fetchData }) // Позволяет вызвать fetchData из 
       </button>
     </div>
 
-    <div v-else-if="information" class="text-lightgray-300 text-center flex flex-col gap-3">
-      <p class="border inline w-auto p-1 border-greenforbuttons-500 rounded-full">
-        {{ information.login }}
-      </p>
-      <div class="flex w-full gap-2 items-center justify-center">
-        <p class="bg-green-500 inline text-black rounded py-0.5 px-1">
-          PRP: {{ points?.codeReviewPoints }}
-        </p>
-        <p class="bg-yellow-500 inline text-black rounded py-0.5 px-1">
-          Coins: {{ points?.coins }}
-        </p>
+    <div v-else-if="information" class="text-lightgray-300 text-center w-full flex flex-col gap-3 p-3">
+      <div class="flex flex-col gap-10 w-full">
+        <div>
+          <p class="text-xl text-justwhite-500 font-bold text-center">{{ information.login }}</p>
+          <p class="text-sm">{{ information.className }}</p>
+        </div>
+        <div>
+          <p>PRP: {{ points?.peerReviewPoints }}</p>
+          <p>Coins: {{ points?.coins }}</p>
+          <p v-if="place">
+            {{ place.clusterName }}, Row: {{ place.row }}, Place: {{ place.number }}
+          </p>
+        </div>
+        <div class="w-full flex flex-col gap-6" >
+          <h2 class="font-bold text-xl text-justwhite-500">Level: {{ information.level }}</h2>
+          <div class="flex justify-between w-full">
+            <p>Experience:</p>
+            <p>
+              {{ information.expValue }} / {{ information.expValue + information.expToNextLevel }}
+            </p>
+          </div>
+          <!-- Прогресс-бар по опыту -->
+          <div class="w-full h-2 bg-gray-700 rounded mt-1">
+            <div
+              class="h-full bg-justwhite-500 rounded transition-all duration-300"
+              :style="{ width: expPercentage }"
+            ></div>
+          </div>
+        </div>
       </div>
-      <p>{{ information.className }}</p>
-      <p>
-        Level: {{ information.level }} [Опыт: {{ information.expValue }} /
-        {{ information.expValue + information.expToNextLevel }}]
-      </p>
-      <p v-if="place">
-        Место: {{ place.clusterName }} - {{ place.row }}{{ place.number }}
-      </p>
     </div>
   </div>
 </template>
