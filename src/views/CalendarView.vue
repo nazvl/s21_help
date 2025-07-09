@@ -22,19 +22,22 @@ const todayISO = ref('')
 const tomorrowISO = ref('')
 
 const authStore = useAuthStore()
-const calendar = ref<Event[] | null>(null)
+const events = ref<Event[] | null>(null)
 const loading = ref<boolean>(true)
 
-// Форматирует ISO дату в удобочитаемую строку на русском
-function formatDateTime(isoString: string): string {
-  return new Date(isoString).toLocaleString('ru-RU', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  })
+// Форматирует ISO дату в удобочитаемую строку
+function formatDateTime(isoStart: string, isoEnd?: string): string {
+  const start = new Date(isoStart);
+  if (!isoEnd) return start.toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false });
+
+  const end = new Date(isoEnd);
+  const sameDay = start.toDateString() === end.toDateString();
+
+  return sameDay
+    ? `${start.toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false })} - ${end.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit', hour12: false })}`
+    : `${start.toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false })} - ${end.toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false })}`;
 }
+
 
 const addDays: number = 30
 const msPerDay: number = 86400000
@@ -53,9 +56,9 @@ async function handleCalendar() {
       `https://edu-api.21-school.ru/services/21-school/api/v1/events?from=${todayISO.value}&to=${tomorrowISO.value}&limit=50&offset=0`,
       authStore.authToken,
     )
-    calendar.value = response.events
+    events.value = response.events
     loading.value = false
-    console.log(calendar.value)
+    console.log(events.value)
   } catch (err) {
     console.error('Ошибка загрузки событий:', err)
   }
@@ -68,38 +71,16 @@ onMounted(() => {
 
 <template>
   <HeaderText text="Calendar of Events"></HeaderText>
-  <div class="flex flex-col gap-3 p-3">
-    <p v-if="loading" class="text-justwhite-500 text-center"><LoaderComponent/></p>
-    <template v-else>
-      <div
-        v-for="event in calendar"
-        :key="event.id"
-        class="bg-lightgray-500 p-1 rounded text-lightgray-300 flex flex-col gap-1"
-      >
-        <h3>{{ event.name }}</h3>
-        <p>
-          <span class="border border-gray-400 px-1 rounded">Тип</span>
-          {{ event.type }}
-        </p>
-        <p v-if="event.description">
-          <span class="border border-blue-400 px-1 rounded">Описание</span>
-          {{ event.description }}
-        </p>
-        <p>
-          <span class="border border-rose-400 px-1 rounded">Место</span>
-          {{ event.location }}
-        </p>
-        <p>
-          <span class="border border-green-400 px-1 rounded">Дата начала</span>
-          {{ formatDateTime(event.startDateTime) }}
-        </p>
-        <p>
-          <span class="border border-red-400 px-1 rounded">Дата окончания</span>
-          {{ formatDateTime(event.endDateTime) }}
-        </p>
+  <div v-if="loading">
+    <LoaderComponent />
+  </div>
+  <div v-else class="p-3">
+    <div>
+      <div v-for="event in events" :key="event.id" class="p-4">
+        <p class="text-sm text-lightgray-300">{{event.location}}</p>
+        <p class="text-base text-justwhite-500 font-bold">{{event.name}} [{{event.type}}]</p>
+        <p class="text-sm text-lightgray-300">{{formatDateTime(event.startDateTime, event.endDateTime)}}</p>
       </div>
-    </template>
+    </div>
   </div>
 </template>
-
-<style scoped></style>
