@@ -83,8 +83,8 @@ onMounted(() => {
       class="text-lightgray-300 p-4 flex flex-row justify-between items-center w-full"
     >
       <div class="flex flex-col gap-1 text-[14px]">
-        <p class="text-base font-bold text-justwhite-500">{{ project.title }}</p>
-        <p class="text-sm">
+        <p class="text-base font-medium text-justwhite-500">{{ project.title }}</p>
+        <p class="text-sm font-normal">
           {{ project.status }}
           <span v-if="project.finalPercentage > 10">({{ project.finalPercentage }}%)</span>
         </p>
