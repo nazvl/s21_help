@@ -125,7 +125,7 @@ onMounted(() => {
         <p class="text-sm text-lightgray-300">{{ event.location }}</p>
         <p class="text-base text-justwhite-500 font-bold">{{ event.name }} [{{ event.type }}]</p>
         <p class="text-sm text-lightgray-300">
-          {{ formatDateTime(event.startDateTime, event.endDateTime) }}
+          {{ formatDateTime(event.startDateTime || '', event.endDateTime) }}
         </p>
       </div>
     </div>
