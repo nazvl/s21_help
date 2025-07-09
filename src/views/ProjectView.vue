@@ -4,6 +4,8 @@ import { ref, onMounted } from 'vue'
 import { useAuthStore } from '@/stores/authStore.ts'
 import Loader from '@/components/LoaderComponent.vue'
 import HeaderText from '@/components/HeaderText.vue'
+import { CheckCircleIcon, ClockIcon, XCircleIcon, EyeIcon } from '@heroicons/vue/16/solid'
+
 const authStore = useAuthStore()
 const username = ref<string>(authStore.username)
 const projects = ref<Array<Project>>([])
@@ -49,36 +51,57 @@ async function fetchData() {
   }
 }
 
+function statusIcon(status: string) {
+  if (status === 'ACCEPTED') {
+    return CheckCircleIcon
+  } else if (status === 'FAILED') {
+    return XCircleIcon
+  } else if (status === 'IN_PROGRESS') {
+    return ClockIcon
+  } else if (status === 'IN_REVIEWS') {
+    return EyeIcon
+  }
+  return null
+}
+
 onMounted(() => {
   fetchData()
 })
 </script>
 
 <template>
-  <HeaderText text="Projects"></HeaderText>
+  <HeaderText text="Projects" class="mb-3"></HeaderText>
 
   <div v-if="loading">
-    <Loader/>
+    <Loader />
   </div>
-  <div class="flex flex-col gap-3 items-center p-5" v-else>
+
+  <div v-else>
     <div
       v-for="project in projects"
-      :key="project.title"
-      class="text-justwhite-500 flex flex-col border gap-0.5 p-3 w-full min-w-65 rounded justify-center"
+      :key="project.id"
+      class="text-lightgray-300 p-4 flex flex-row justify-between items-center w-full"
     >
-      <p class="w-64">Name: {{ project.title }}</p>
-      <p
-        :class="{
-          'bg-green-500': project.status === 'ACCEPTED',
-          'bg-red-500': project.status === 'FAILED',
-          'bg-blue-500': project.status === 'IN_PROGRESS',
-          'bg-yellow-500': project.status === 'IN_REVIEWS',
-        }"
-        class="w-60 px-1 rounded"
-      >
-        Status: {{ project.status }}
-        <span v-if="project.finalPercentage > 30">( {{ project.finalPercentage }} % )</span>
-      </p>
+      <div class="flex flex-col gap-1 text-[14px]">
+        <p class="text-md font-bold">{{ project.title }}</p>
+        <p>
+          {{ project.status }}
+          <span v-if="project.finalPercentage > 10">({{ project.finalPercentage }}%)</span>
+        </p>
+      </div>
+      <div>
+        <p class="w-6 h-6">
+          <component
+            :is="statusIcon(project.status)"
+            class="w-6 h-6"
+            :class="{
+              'text-green-300': project.status === 'ACCEPTED',
+              'text-yellow-200': project.status === 'IN_REVIEW' || project.status === 'IN_PROGRESS',
+              'text-red-300': project.status === 'FAILED'
+            }"
+          />
+        </p>
+      </div>
     </div>
   </div>
 </template>
