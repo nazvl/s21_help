@@ -3,6 +3,7 @@ import { sendRequest } from '@/api/api.ts'
 import { useAuthStore } from '@/stores/authStore'
 import { ref, onMounted } from 'vue'
 import LoaderComponent from '@/components/LoaderComponent.vue'
+import HeaderText from '@/components/HeaderText.vue'
 
 export interface Event {
   id: number // Уникальный идентификатор события
@@ -66,7 +67,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <h1 class="text-3xl text-justwhite-500 text-center mt-3">Event Calendar</h1>
+  <HeaderText text="Calendar of Events"></HeaderText>
   <div class="flex flex-col gap-3 p-3">
     <p v-if="loading" class="text-justwhite-500 text-center"><LoaderComponent/></p>
     <template v-else>

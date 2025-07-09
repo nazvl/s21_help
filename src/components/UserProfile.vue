@@ -89,7 +89,6 @@ defineExpose({ fetchData }) // Позволяет вызвать fetchData из 
 
 <template>
   <div class="flex flex-col gap-12 py-5 px-2 items-center">
-    <h1 class="text-3xl text-justwhite-500 text-center">Participant</h1>
     <img :src="avatarImage" class="rounded-full w-30 h-30" alt="avatar" />
 
     <div v-if="loading" class="text-lightgray-300 text-center">

@@ -2,6 +2,7 @@
 import UserProfile from '@/components/UserProfile.vue'
 import { useAuthStore } from '@/stores/authStore'
 import { useRouter } from 'vue-router'
+import HeaderText from '@/components/HeaderText.vue'
 
 const authStore = useAuthStore()
 const router = useRouter()
@@ -14,6 +15,7 @@ function logout() {
 </script>
 
 <template>
+  <HeaderText text="Participiant" class="mb-4"></HeaderText>
   <UserProfile
       :username="authStore.username"
       :authToken="authStore.authToken"

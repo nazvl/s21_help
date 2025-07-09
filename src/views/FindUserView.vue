@@ -3,6 +3,7 @@ import { ref, onMounted } from 'vue'
 import UserProfile from '@/components/UserProfile.vue'
 import { useAuthStore } from '@/stores/authStore.ts'
 import ExpandedProfileInfo from '@/components/ExpandedProfileInfo.vue'
+import HeaderText from '@/components/HeaderText.vue'
 
 const authStore = useAuthStore()
 
@@ -22,6 +23,7 @@ onMounted(() => {
 </script>
 
 <template>
+  <HeaderText text="Search"></HeaderText>
   <div class="max-w-2xl mx-auto p-6">
     <div class="flex items-center mb-8 space-x-2">
       <div class="relative flex-1">

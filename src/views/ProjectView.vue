@@ -3,6 +3,7 @@ import { sendRequest } from '@/api/api.ts'
 import { ref, onMounted } from 'vue'
 import { useAuthStore } from '@/stores/authStore.ts'
 import Loader from '@/components/LoaderComponent.vue'
+import HeaderText from '@/components/HeaderText.vue'
 const authStore = useAuthStore()
 const username = ref<string>(authStore.username)
 const projects = ref<Array<Project>>([])
@@ -54,7 +55,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <h1 class="text-3xl text-justwhite-500 text-center mt-3">Projects</h1>
+  <HeaderText text="Projects"></HeaderText>
 
   <div v-if="loading">
     <Loader/>
