@@ -1,16 +1,24 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useAuthStore } from '@/stores/authStore'
+import {getItem} from '@/stores/idb.ts'
 
 const router = useRouter()
 const authStore = useAuthStore()
 
 const login = ref<string>('')
 const password = ref<string>('')
+
 const error = ref<string>('')
 
 const isSaveData = ref<boolean>(false)
+
+onMounted(async () => {
+
+  login.value = (await getItem('savedLogin')) || ''
+  password.value = (await getItem('savedPassword')) || ''
+})
 
 async function handleLogin() {
   try {
