@@ -35,8 +35,8 @@ async function fetchClusters(): Promise<void> {
   try {
     isLoading.value = true
     const res = await sendRequest(
-      `https://edu-api.21-school.ru/services/21-school/api/v1/campuses/${props.campusId}/clusters`,
-      authStore.authToken,
+        `https://edu-api.21-school.ru/services/21-school/api/v1/campuses/${props.campusId}/clusters`,
+        authStore.authToken,
     )
     clusters.value = res.clusters
   } catch (error) {
@@ -53,14 +53,14 @@ async function fetchClusters(): Promise<void> {
     <Loader/>
   </div>
 
-  <div v-else class="rounded shadow w-full mx-auto flex flex-col gap-1">
+  <div class="w-full flex flex-wrap gap-2">
     <div
-      v-for="cluster in clusters"
-      :key="cluster.id"
-      class="flex justify-between items-center p-3 border border-gray-200 rounded"
+        v-for="cluster in clusters"
+        :key="cluster.id"
+        class="border border-b-lightgray-900 rounded p-6 bg-[#293830] grow min-w-[40%] gap-2"
     >
-      <div class="font-medium text-justwhite-500">{{ cluster.name }}</div>
-      <div class="text-sm text-lightgray-300">
+      <div class="font-bold text-xl text-justwhite-500">{{ cluster.name }}</div>
+      <div class="text-xs font-semibold text-lightgray-300">
         {{ cluster.availableCapacity }} / {{ cluster.capacity }}
       </div>
     </div>
