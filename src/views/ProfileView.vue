@@ -15,7 +15,7 @@ function logout() {
 </script>
 
 <template>
-  <HeaderText text="Participiant" class="mb-4"></HeaderText>
+  <HeaderText text="Participant"></HeaderText>
   <div class="w-full p-3">
     <UserProfile
       :username="authStore.username"

@@ -4,6 +4,7 @@ import { sendRequest } from '@/api/api.ts'
 import { useAuthStore } from '@/stores/authStore.ts'
 import CampusInfo from '@/components/CampusInfo.vue'
 import Loader from '@/components/LoaderComponent.vue'
+import HeaderText from '@/components/HeaderText.vue'
 
 const authStore = useAuthStore()
 const loading = ref<boolean>(true)
@@ -53,7 +54,7 @@ async function fetchLocalCampus() {
 </script>
 
 <template>
-  <h1 class="text-white text-4xl text-center my-5">Campuses</h1>
+  <HeaderText text="Campuses"></HeaderText>
   <div v-if="loading" class="">
     <Loader />
   </div>

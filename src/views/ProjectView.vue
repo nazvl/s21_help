@@ -70,7 +70,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <HeaderText text="Projects" class="mb-3"></HeaderText>
+  <HeaderText text="Projects"></HeaderText>
 
   <div v-if="loading">
     <Loader />
