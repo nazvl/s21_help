@@ -3,6 +3,8 @@ import { computed, ref, toRaw } from 'vue'
 import { getToken } from '@/api/getToken.ts'
 import { getItem, removeItem, setItem } from '@/stores/idb.ts'
 import { useRouter } from 'vue-router'
+import {requestNotificationPermission, showNotification} from '@/services/notifications.ts'
+
 
 interface User {
   access_token?: string
@@ -36,6 +38,7 @@ export const useAuthStore = defineStore('user', () => {
       await removeItem('savedLogin')
       await removeItem('savedPassword')
     }
+    showNotification('School21 Helper', 'success logout')
   }
 
   async function getDataFromDb() {
@@ -71,24 +74,27 @@ export const useAuthStore = defineStore('user', () => {
       user.value = tokenData
       username.value = login || ''
       isLoggedIn.value = true
+
+      await requestNotificationPermission();
+
       if (tokenData.expires_in) {
         // Здесь один раз переводим expires_in из секунд в миллисекунды
-        const expiresInMs = tokenData.expires_in * 1000
-        user.value.expiresAt = Date.now() + expiresInMs
-        await setItem('expiresAt', user.value.expiresAt)
+        const expiresInMs = tokenData.expires_in * 1000;
+        user.value.expiresAt = Date.now() + expiresInMs;
+        await setItem('expiresAt', user.value.expiresAt);
 
         // Запускаем таймер один раз с готовым значением в миллисекундах
-        scheduleAutoLogout(expiresInMs)
+        scheduleAutoLogout(expiresInMs);
       } else {
         // Если expires_in нет — таймер не ставим
-        scheduleAutoLogout(0)
+        scheduleAutoLogout(0);
       }
 
-      await setItem('user', toRaw(user.value))
-      await setItem('username', username.value)
+      await setItem('user', toRaw(user.value));
+      await setItem('username', username.value);
 
-      console.log(user.value)
-      console.log(username.value)
+      console.log(user.value);
+      console.log(username.value);
       return user.value
     } catch (err) {
       console.log(err)
