@@ -1,8 +1,8 @@
-import { defineStore } from 'pinia'
-import { computed, ref, toRaw } from 'vue'
-import { getToken } from '@/api/getToken.ts'
-import { getItem, removeItem, setItem } from '@/stores/idb.ts'
-import { useRouter } from 'vue-router'
+import {defineStore} from 'pinia'
+import {computed, ref, toRaw} from 'vue'
+import {getToken} from '@/api/getToken.ts'
+import {getItem, removeItem, setItem} from '@/stores/idb.ts'
+import {useRouter} from 'vue-router'
 import {requestNotificationPermission, showNotification} from '@/services/notifications.ts'
 
 
