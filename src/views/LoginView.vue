@@ -42,7 +42,7 @@ async function handleLogin() {
 
 <template>
   <div class="flex flex-col gap-40 items-center w-full">
-    <h1 class="mt-4 text-justwhite-500 text-xl">School21</h1>
+    <h1 class="mt-4 text-justwhite-500 text-xl">School 21</h1>
     <div class="flex items-center flex-col gap-6 text-2xl w-full">
       <input
         class="border rounded bg-lightgray-500 h-12 text-lg text-lightgray-300 p-2 w-80"
