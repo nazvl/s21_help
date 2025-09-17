@@ -3,7 +3,7 @@ import { ref, onMounted, watch } from 'vue'
 import { sendRequest } from '@/api/api.ts'
 import { useAuthStore } from '@/stores/authStore.ts'
 import Loader from '@/components/LoaderComponent.vue'
-import { apiLink } from '@/api/apiLink.ts'
+import { apiLink } from '@/api/api.ts'
 const authStore = useAuthStore()
 
 const props = defineProps<{
