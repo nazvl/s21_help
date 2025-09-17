@@ -1,7 +1,7 @@
 const CORS_PROXY = 'https://corsproxy.io/?'
 
 export async function getToken(login: string, password: string) {
-  const tokenUrl = `${CORS_PROXY}https://auth.sberclass.ru/auth/realms/EduPowerKeycloak/protocol/openid-connect/token`
+  const tokenUrl = `${CORS_PROXY}https://dev21-school.ru.pcbltools.ru/auth/realms/EduPowerKeycloak/protocol/openid-connect/token`
 
   const response = await fetch(tokenUrl, {
     method: 'POST',
