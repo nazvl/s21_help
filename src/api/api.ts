@@ -30,3 +30,5 @@ export async function sendRequest(request: string, authToken: string) {
     throw error
   }
 }
+
+export const apiLink = 'https://edu-api.21-school.ru'

@@ -5,7 +5,7 @@ import { useAuthStore } from '@/stores/authStore.ts'
 import Loader from '@/components/LoaderComponent.vue'
 import HeaderText from '@/components/HeaderText.vue'
 import { CheckCircleIcon, ClockIcon, XCircleIcon, EyeIcon } from '@heroicons/vue/16/solid'
-
+import { apiLink } from '@/api/api.ts'
 const authStore = useAuthStore()
 const username = ref<string>(authStore.username)
 const projects = ref<Array<Project>>([])
@@ -33,7 +33,7 @@ interface Project {
 async function fetchData() {
   try {
     const response = await sendRequest(
-      `https://edu-api.21-school.ru/services/21-school/api/v1/participants/${username.value}/projects?limit=999&offset=0`,
+      `${apiLink}/services/21-school/api/v1/participants/${username.value}/projects?limit=999&offset=0`,
       authStore.authToken,
     )
     projects.value = response.projects.filter((project: Project) =>

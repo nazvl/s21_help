@@ -52,7 +52,7 @@ onMounted(async () => {
 
 async function fetchSkills() {
   const response = await sendRequest(
-    `https://edu-api.21-school.ru/services/21-school/api/v1/participants/${props.username}/skills`,
+    `${apiLink}/services/21-school/api/v1/participants/${props.username}/skills`,
     props.authToken,
   )
   skills.value = response.skills.sort((a: Skill, b: Skill) => b.points - a.points)
@@ -60,21 +60,21 @@ async function fetchSkills() {
 
 async function fetchAvgTime() {
   avgTime.value = await sendRequest(
-    `https://edu-api.21-school.ru/services/21-school/api/v1/participants/${props.username}/logtime?date=${today.value}`,
+    `${apiLink}/services/21-school/api/v1/participants/${props.username}/logtime?date=${today.value}`,
     props.authToken,
   )
 }
 
 async function fetchFeedback() {
   feedback.value = await sendRequest(
-    `https://edu-api.21-school.ru/services/21-school/api/v1/participants/${props.username}/feedback`,
+    `${apiLink}/services/21-school/api/v1/participants/${props.username}/feedback`,
     props.authToken,
   )
 }
 
 async function fetchTribe() {
   tribe.value = await sendRequest(
-    `https://edu-api.21-school.ru/services/21-school/api/v1/participants/${props.username}/coalition`,
+    `${apiLink}/services/21-school/api/v1/participants/${props.username}/coalition`,
     props.authToken,
   )
 }

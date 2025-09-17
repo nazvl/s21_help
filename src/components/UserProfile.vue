@@ -3,6 +3,7 @@ import { onMounted, ref, computed } from 'vue'
 import avatarImage from '@/assets/noavatar.png'
 import { sendRequest } from '@/api/api.ts'
 import LoaderComponent from '@/components/LoaderComponent.vue'
+import { apiLink } from '@/api/api.ts'
 
 interface Props {
   username: string
@@ -53,15 +54,15 @@ async function fetchData() {
 
     const [info, pts, plc] = await Promise.all([
       sendRequest(
-        `https://edu-api.21-school.ru/services/21-school/api/v1/participants/${props.username}`,
+        `${apiLink}/services/21-school/api/v1/participants/${props.username}`,
         props.authToken,
       ),
       sendRequest(
-        `https://edu-api.21-school.ru/services/21-school/api/v1/participants/${props.username}/points`,
+        `${apiLink}/services/21-school/api/v1/participants/${props.username}/points`,
         props.authToken,
       ),
       sendRequest(
-        `https://edu-api.21-school.ru/services/21-school/api/v1/participants/${props.username}/workstation`,
+        `${apiLink}/services/21-school/api/v1/participants/${props.username}/workstation`,
         props.authToken,
       ),
     ])

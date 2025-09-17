@@ -38,7 +38,7 @@ export const useEventStore = defineStore('events', () => {
     try {
       updateDates()
       const response = await sendRequest(
-        `https://edu-api.21-school.ru/services/21-school/api/v1/events?from=${todayISO.value}&to=${tomorrowISO.value}&limit=50&offset=0`,
+        `${apiLink}/services/21-school/api/v1/events?from=${todayISO.value}&to=${tomorrowISO.value}&limit=50&offset=0`,
         authStore.authToken,
       )
       events.value = response.events

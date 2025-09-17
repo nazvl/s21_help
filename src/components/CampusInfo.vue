@@ -48,7 +48,7 @@ async function fetchClusters(): Promise<void> {
   try {
     isLoading.value = true
     const res = await sendRequest(
-      `https://edu-api.21-school.ru/services/21-school/api/v1/campuses/${props.campusId}/clusters`,
+      `${apiLink}/services/21-school/api/v1/campuses/${props.campusId}/clusters`,
       authStore.authToken,
     )
     clusters.value = res.clusters
@@ -64,7 +64,7 @@ async function fetchMap(choosenClusterId: number) {
   choosenCluster.value = clusters.value?.find((cluster) => cluster.id === choosenClusterId) || null
   try {
     const res = await sendRequest(
-      `https://edu-api.21-school.ru/services/21-school/api/v1/clusters/${choosenClusterId}/map?limit=50&offset=0&occupied=true`,
+      `${apiLink}/services/21-school/api/v1/clusters/${choosenClusterId}/map?limit=50&offset=0&occupied=true`,
       authStore.authToken,
     )
     clusterMap.value = res.clusterMap

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import { sendRequest } from '@/api/api.ts'
+import { apiLink, sendRequest } from '@/api/api.ts'
 import { useAuthStore } from '@/stores/authStore.ts'
 import CampusInfo from '@/components/CampusInfo.vue'
 import Loader from '@/components/LoaderComponent.vue'
@@ -27,7 +27,7 @@ onMounted(async () => {
 async function fetchCampuses() {
   try {
     const res = await sendRequest(
-      `https://edu-api.21-school.ru/services/21-school/api/v1/campuses`,
+      `${apiLink}/services/21-school/api/v1/campuses`,
       authStore.authToken,
     )
     campuses.value = res.campuses.filter(
@@ -46,7 +46,7 @@ async function fetchCampuses() {
 
 async function fetchLocalCampus() {
   const res = await sendRequest(
-    `https://edu-api.21-school.ru/services/21-school/api/v1/participants/${authStore.username}`,
+    `${apiLink}/services/21-school/api/v1/participants/${authStore.username}`,
     authStore.authToken,
   )
   campusId.value = res.campus.id
