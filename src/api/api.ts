@@ -31,4 +31,4 @@ export async function sendRequest(request: string, authToken: string) {
   }
 }
 
-export const apiLink = 'https://edu-api.21-school.ru'
+export const apiLink = 'https://platform.21-school.ru'
