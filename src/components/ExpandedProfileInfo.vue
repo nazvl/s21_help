@@ -2,6 +2,7 @@
 import { onMounted, ref } from 'vue'
 import { sendRequest } from '@/api/api.ts'
 import LoaderComponent from '@/components/LoaderComponent.vue'
+import { apiLink } from '@/api/api.ts'
 
 interface Props {
   username: string

@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { sendRequest } from '@/api/api.ts'
 import { useAuthStore } from '@/stores/authStore.ts'
+import { apiLink } from '@/api/api.ts'
 
 export const useEventStore = defineStore('events', () => {
   interface Event {
